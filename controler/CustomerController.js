@@ -12,7 +12,7 @@ export class CustomerController{
 
     //chech validations
     inputValidation(){
-        //   !/^(C)-([0-9]{2,})$/.test($("#customer_id").val()) ? alert("Invalid ID")  : alert("Id ok");
+      
         !/^(C)([0-9]{2,})$/.test($("#customer_id").val())
           ? alert("Invalid ID")
           : !$("#customer_first_name").val()
@@ -55,6 +55,34 @@ export class CustomerController{
                     alert('Customer data Sent')
                 }else{
                     alert('TaskFail');
+                }
+            }
+        });
+    }
+
+    updateCustomer(){
+        const cusObj=JSON.stringify(new Customer(
+            $('#customer_id').val(),
+            $('#customer_name').val(),
+            $('#customer_address').val(),
+            $('#customer_nic').val(),
+            $('#customer_email').val(),
+            $('#customer_contact').val()
+        ));
+
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/mypos/Updatecustomer",
+            data: cusObj,
+            dataType: "json",
+            headers:{
+                "Content-Type":"Application/json"
+            },
+            success: function (response) {
+                if(response.status===200){
+                    alert('Customer Updated Data sent')
+                }else{
+                    alert('Task Failed');
                 }
             }
         });
