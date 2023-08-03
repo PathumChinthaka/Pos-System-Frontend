@@ -4,9 +4,7 @@ export class CustomerController{
 
     constructor(){
         $('#btn-add').on('click',()=>{
-            if(this.inputValidation()){
-                this.saveCustomerData();
-            }
+           this.saveCustomerData();
         });
     }
 
@@ -15,10 +13,8 @@ export class CustomerController{
       
         !/^(C)([0-9]{2,})$/.test($("#customer_id").val())
           ? alert("Invalid ID")
-          : !$("#customer_first_name").val()
-          ? alert("Invalid name")
-          : !$("#customer_last_name").val()
-          ? alert("Invalid Last Name")
+          : !$("#customer_name").val()
+          ? alert("Invalid Name")
           : !$("#customer_address").val()
           ? alert("Invalid address")
           : !$("#customer_nic").val()
@@ -54,13 +50,17 @@ export class CustomerController{
                 if(response.status===200){
                     alert('Customer data Sent')
                 }else{
-                    alert('TaskFail');
+                    alert(response.data);
                 }
+            },
+            error:(e)=>{
+                console.log(e);
             }
         });
     }
 
     updateCustomer(){
+
         const cusObj=JSON.stringify(new Customer(
             $('#customer_id').val(),
             $('#customer_name').val(),
@@ -84,6 +84,32 @@ export class CustomerController{
                 }else{
                     alert('Task Failed');
                 }
+            },
+            error:(e)=>{
+                console.log(e);
+            }
+        });
+    }
+
+    deleteCustomer(){
+
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/mypos/customer?customerId="+$('#customer_id').val(),
+            data: cusObj,
+            dataType: "json",
+            headers:{
+                "Content-Type":"Application/json"
+            },
+            success: function (response) {
+                if(response.status===200){
+                    alert('Customer Updated Data sent')
+                }else{
+                    alert('Task Failed');
+                }
+            },
+            error:(e)=>{
+                console.log(e);
             }
         });
     }
